@@ -1,6 +1,6 @@
 import { Component } from "react";
 import "./login-signin.css";
-import logo from "../JPEG/main-logo.jpeg";
+import logo from "../Icons/JPEG/main-logo.jpeg";
 import { Link } from "react-router-dom";
 import { LightInput } from "../Components/Fields";
 

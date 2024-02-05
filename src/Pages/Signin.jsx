@@ -2,7 +2,7 @@ import { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./login-signin.css";
-import logo from "../JPEG/main-logo.jpeg";
+import logo from "../Icons/JPEG/main-logo.jpeg";
 import { Link } from "react-router-dom";
 import { FormInput } from "../Components/Fields";
 
