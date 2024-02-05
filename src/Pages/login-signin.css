@@ -1,0 +1,14 @@
+.form{
+  max-width: 330px;
+}
+img[alt="Logo"]{
+  width: 65%;
+  align-self: center;
+  display: block;
+  border-radius: var(--bs-border-radius);
+}
+@media (min-width: 992px) {
+  .form{
+      max-width: 600px;
+  }
+}
