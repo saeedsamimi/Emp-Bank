@@ -1,6 +1,9 @@
 import { Component } from "react";
 import "./login-signin.css";
 import logo from "../Icons/JPEG/main-logo.jpeg";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import "bootstrap/dist/js/bootstrap.bundle";
 import { Link } from "react-router-dom";
 import { LightInput } from "../Components/Fields";
 

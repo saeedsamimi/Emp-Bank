@@ -1,6 +1,7 @@
 import { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import "bootstrap/dist/js/bootstrap.bundle";
 import "./login-signin.css";
 import logo from "../Icons/JPEG/main-logo.jpeg";
 import { Link } from "react-router-dom";
