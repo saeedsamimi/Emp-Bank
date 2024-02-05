@@ -5,7 +5,7 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./Error";
 import SignIn from "./Pages/Signin";
-import Login from "./pages/Login";
+import Login from "./Pages/Login";
 
 const router = createBrowserRouter([
   {
