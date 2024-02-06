@@ -1,15 +1,3 @@
-#root {
-  justify-content: stretch;
-  align-items: start;
-}
-nav.navbar {
-  transition: all 0.5s ease-in-out;
-  contain: layout;
-  width: 100px;
-}
-.dashboard-main {
-  display: grid;
-}
 :root {
   --header-height: 3rem;
   --nav-width: 68px;
@@ -81,9 +69,6 @@ a {
 .show {
   left: 0;
 }
-.body-pd {
-  padding-left: calc(var(--nav-width) + 1rem);
-}
 .active {
   color: var(--white-color);
 }
@@ -100,8 +85,8 @@ a {
   height: 100vh;
 }
 @media screen and (min-width: 768px) {
-  body {
-    padding: 1rem calc(var(--nav-width) + 1rem);
+  main.dashboard {
+    padding: 1rem 1rem 1rem calc(var(--nav-width) + 1rem);
   }
   .l-navbar {
     left: 0;

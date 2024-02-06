@@ -2,19 +2,22 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function App() {
-  const [username, setUsername] = useState("NULL");
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:8080/login", {
-      method: "GET",
+    fetch("http://localhost:8080/Auth", {
+      method: "POST",
       mode: "cors",
       headers: {
         Authorization: "Bearer " + document.cookie.split("=")[1],
       },
     })
-      .then((result) => result.text())
+      .then((result) => {
+        if (result.ok) return result.text();
+        else setUsername("");
+      })
       .then((res) => setUsername(res))
-      .catch((error) => console.log(error));
+      .catch(() => setUsername(""));
   }, []);
 
   return (

@@ -30,13 +30,13 @@ export default function ErrorPage() {
   const error = useRouteError();
   const location = useLocation();
   return (
-    <>
+    <main className="form-signin w-100 m-auto align-items-center d-flex flex-column">
       <img src={logo} width={150} className="pb-4" />
       {GetErrorHeader(error.status, location.pathname)}
       <p className="mt-2 px-5 py-1 rounded-bottom-3 text-danger border-danger border border-1">
         <i>{error.statusText || error.message}</i>
       </p>
       <Link to="/login">Go to Login page</Link>
-    </>
+    </main>
   );
 }

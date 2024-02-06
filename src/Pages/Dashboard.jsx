@@ -6,12 +6,12 @@ import "./dashboard.css";
 
 const items = ["Dashboard", "Users", "Messages", "Bookmark", "Files", "Stats"];
 const icons = [
-  ["grid"],
-  ["person"],
-  ["chat-right"],
-  ["bookmark"],
-  ["folder"],
-  ["bar-chart"],
+  "grid",
+  "person",
+  "chat-right",
+  "bookmark",
+  "folder",
+  "bar-chart",
 ];
 
 function sideBarItem(highlighted, onClick, i) {
@@ -75,9 +75,9 @@ class Dashboard extends Component {
             </a>
           </nav>
         </div>
-        <div className="height-100 bg-light">
+        <main className="height-100 bg-light dashboard w-100">
           <h4>Main Components</h4>
-        </div>
+        </main>
       </div>
     );
   }

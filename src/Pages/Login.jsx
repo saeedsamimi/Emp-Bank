@@ -15,6 +15,33 @@ class Login extends Component {
 
   onLogInFormSubmit = async (e) => {
     e.preventDefault();
+    const toJson = (form) => {
+      var object = {};
+      const data = new FormData(form);
+      data.forEach((value, key) => (object[key] = value));
+      return JSON.stringify(object);
+    };
+    const url = "http://localhost:8080/login";
+    fetch(url, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: toJson(e.target),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.result === true) {
+          document.cookie = "token=" + result.token;
+          alert(`Success!`);
+        } else {
+          alert(result.msg, result.reason);
+        }
+      })
+      .catch((error) => {
+        alert(`Connection Failed!`);
+      });
   };
 
   handlePassClick = () => {
@@ -71,7 +98,7 @@ class Login extends Component {
             Password
           </LightInput>
           <button type="submit" className="btn btn-primary w-100">
-            Sign In
+            Log In
           </button>
           <Link to="/signin" className="text-center d-block mt-1">
             Dont have account?
