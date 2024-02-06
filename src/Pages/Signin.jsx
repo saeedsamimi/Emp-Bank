@@ -20,7 +20,7 @@ class SignIn extends Component {
 
   onSignInFormSubmit = async (e) => {
     e.preventDefault();
-    const url = "http://localhost:80/" + "signin";
+    const url = "http://localhost:8080/" + "signin";
     // fetch the backend sign in
 
     const toJson = (form) => {
@@ -40,10 +40,15 @@ class SignIn extends Component {
     })
       .then((response) => response.json())
       .then((result) => {
-        alert(`Success: ${result}`);
+        if (result.result === true) {
+          document.cookie = "token=" + result.token;
+          alert(`Success!`);
+        } else {
+          alert(result.msg, result.reason);
+        }
       })
       .catch((error) => {
-        alert(`Failed: ${error}`);
+        alert(`Connection Failed!`);
       });
   };
 
