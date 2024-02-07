@@ -21,7 +21,7 @@ class Login extends Component {
       data.forEach((value, key) => (object[key] = value));
       return JSON.stringify(object);
     };
-    const url = "http://localhost:8080/login";
+    const url = import.meta.env.VITE_API_URL + "/login";
     fetch(url, {
       method: "POST",
       mode: "cors",

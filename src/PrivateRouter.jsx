@@ -5,7 +5,7 @@ function PrivateRouter({ Component }) {
   const [isAuthenticated, setAuthentication] = useState(null);
   const [username, setUsername] = useState("");
   useEffect(() => {
-    fetch("http://localhost:8080/Auth", {
+    fetch(import.meta.env.VITE_API_URL + "/Auth", {
       method: "POST",
       mode: "cors",
       headers: {
