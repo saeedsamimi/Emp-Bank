@@ -77,6 +77,7 @@ class Dashboard extends Component {
         </div>
         <main className="height-100 bg-light dashboard w-100">
           <h4>Main Components</h4>
+          <h1>Hello User: {this.props.username && this.props.username}</h1>
         </main>
       </div>
     );

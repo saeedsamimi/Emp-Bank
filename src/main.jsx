@@ -2,11 +2,17 @@ import React from "react";
 import "./index.css";
 import App from "./App";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
 import ErrorPage from "./Error";
 import SignIn from "./Pages/Signin";
 import Login from "./Pages/Login";
 import Dashboard from "./Pages/Dashboard";
+import PrivateRouter from "./PrivateRouter";
 
 const router = createBrowserRouter([
   {
@@ -24,7 +30,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Dashboard index={0} />,
+    element: <PrivateRouter Component={Dashboard} />,
   },
 ]);
 
