@@ -1,11 +1,12 @@
 import { useState, useEffect, useTransition, useCallback } from "react";
 import { Navigate } from "react-router-dom";
+const URL = "https://saeedsamimi-nodejs.liara.run";
 
 function PrivateRouter({ Component }) {
   const [isAuthenticated, setAuthentication] = useState(null);
   const [username, setUsername] = useState("");
   useEffect(() => {
-    fetch(import.meta.env.VITE_API_URL + "/Auth", {
+    fetch(URL + "/Auth", {
       method: "POST",
       mode: "cors",
       headers: {

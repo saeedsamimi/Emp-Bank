@@ -22,6 +22,7 @@ class Login extends Component {
       return JSON.stringify(object);
     };
     const url = import.meta.env.VITE_API_URL + "/login";
+    console.log(url);
     fetch(url, {
       method: "POST",
       mode: "cors",

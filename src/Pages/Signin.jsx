@@ -29,7 +29,7 @@ class SignIn extends Component {
       data.forEach((value, key) => (object[key] = value));
       return JSON.stringify(object);
     };
-
+    console.log(url);
     fetch(url, {
       method: "POST",
       mode: "cors",

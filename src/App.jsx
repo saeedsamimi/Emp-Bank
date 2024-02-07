@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+const URL = "https://saeedsamimi-nodejs.liara.run";
 
 export default function App() {
   const [username, setUsername] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:8080/Auth", {
+    fetch(import.meta.env.VITE_API_URL + "/Auth", {
       method: "POST",
       mode: "cors",
       headers: {

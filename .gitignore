@@ -25,6 +25,3 @@ dist-ssr
 
 # build zips
 *.zip
-
-# environment variables
-.env
