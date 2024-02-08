@@ -5,6 +5,7 @@
   --first-color-light: #afa5d9;
   --white-color: #f7f6fb;
   --normal-font-size: 1rem;
+  --var-padding: 10px;
   --z-fixed: 100;
 }
 .logo {
@@ -24,8 +25,9 @@ a {
   width: var(--nav-width);
   height: 100vh;
   background-color: var(--first-color);
-  transition: 0.5s;
+  transition: 0.5s ease-in-out;
   z-index: var(--z-fixed);
+  box-shadow: 1px 0 5px rgba(0, 0, 0, 0.5);
 }
 .nav {
   height: 100%;
@@ -84,17 +86,85 @@ a {
 .height-100 {
   height: 100vh;
 }
+.header-logo {
+  width: 45px;
+  height: 45px;
+  background: url("../Icons/PNG/main-logo-white-transparent.png") no-repeat
+    center / cover;
+  background-size: 180%;
+}
+main.dashboard header {
+  align-items: center;
+  padding: var(--var-padding);
+  transition: all 0.5s ease-in-out;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+}
+main.dashboard {
+  transition: 0.5s ease-in-out;
+}
+main.dashboard header.open {
+  padding-left: 80px;
+}
+main.dashboard header i.bi {
+  font-size: 1.5rem;
+}
+.main-view {
+  display: grid;
+  padding: var(--var-padding);
+  gap: var(--var-padding);
+  grid-template-columns: repeat(4, 1fr);
+}
+.toolbox-container {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-row: span 3;
+  justify-items: center;
+  box-shadow: 0 0 7px rgba(0, 0, 0, 0.2);
+  padding: var(--var-padding);
+  grid-template-columns: subgrid;
+  grid-template-rows: subgrid;
+  & .bi {
+    margin-right: var(--var-padding);
+  }
+  & .head {
+    grid-column: 1 / -1;
+  }
+  & a {
+    grid-column: span 2;
+  }
+}
+@media screen and (min-width: 630px) {
+  .toolbox-container {
+    grid-column: span 2;
+    padding: var(--var-padding) calc(var(--var-padding) + 0.5rem);
+    & .head {
+      grid-column: span 2;
+      margin-bottom: var(--var-padding);
+    }
+    & a {
+      grid-column: span 1;
+    }
+  }
+}
 @media screen and (min-width: 768px) {
+  .toolbox-container {
+    justify-items: center;
+    padding: var(--var-padding) calc(var(--var-padding) + 0.5rem);
+    & .head {
+      grid-column: span 2;
+      margin-bottom: var(--var-padding);
+    }
+  }
   main.dashboard {
-    padding: 1rem 1rem 1rem calc(var(--nav-width) + 1rem);
+    padding-left: calc(var(--nav-width));
   }
   .l-navbar {
     left: 0;
   }
+  main.dashboard header.open {
+    padding-left: 166px;
+  }
   .show {
     width: calc(var(--nav-width) + 156px);
-  }
-  .body-pd {
-    padding-left: calc(var(--nav-width) + 188px);
   }
 }
