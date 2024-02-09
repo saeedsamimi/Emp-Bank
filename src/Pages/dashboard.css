@@ -68,7 +68,7 @@ a {
   font-size: 1.25rem;
   margin-right: 7px;
 }
-.show {
+.show_nav {
   left: 0;
 }
 .active {
@@ -102,11 +102,15 @@ main.dashboard header {
 main.dashboard {
   transition: 0.5s ease-in-out;
 }
-main.dashboard header.open {
-  padding-left: 80px;
+header.open {
+  padding-left: 85px;
 }
-main.dashboard header i.bi {
+header > .bi,
+header > * > .bi {
   font-size: 1.5rem;
+}
+header .dropdown-menu .bi {
+  padding-right: 7px;
 }
 .main-view {
   display: grid;
@@ -164,7 +168,7 @@ main.dashboard header i.bi {
   main.dashboard header.open {
     padding-left: 166px;
   }
-  .show {
+  .show_nav {
     width: calc(var(--nav-width) + 156px);
   }
 }

@@ -2,6 +2,7 @@ import { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/js/bootstrap.bundle";
+import logo from "../Icons/PNG/main-logo-black-transparent.png";
 import "./dashboard.css";
 import Navbar from "../Components/Navbar";
 import ToolBox from "../Components/ToolBox";
@@ -129,7 +130,40 @@ class Dashboard extends Component {
               onClick={() => this.setState({ expanded: !this.state.expanded })}
             ></i>
             <div className="header-logo"></div>
-            <i className="bi bi-three-dots-vertical"></i>
+            <div className="dropdown">
+              <button
+                className="btn text-white dropdown"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i className="bi bi-three-dots-vertical"></i>
+              </button>
+              <ul className="dropdown-menu">
+                <img className="dropdown-item" src={logo} />
+                <li>
+                  <a className="dropdown-item" href="#">
+                    <i className="bi bi-person"></i>
+                    Profile
+                  </a>
+                </li>
+                <li>
+                  <a className="dropdown-item" href="#">
+                    <i className="bi bi-gear"></i>
+                    Setting
+                  </a>
+                </li>
+                <li>
+                  <hr className="dropdown-divider" />
+                </li>
+                <li>
+                  <a className="dropdown-item text-danger" href="#">
+                    <i className="bi bi-door-closed"></i>
+                    Log out
+                  </a>
+                </li>
+              </ul>
+            </div>
           </header>
           <div className="main-view">{this.Toolboxes.map(ToolBox)}</div>
         </main>
