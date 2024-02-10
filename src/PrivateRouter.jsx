@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { Navigate } from "react-router-dom";
 
 function PrivateRouter({ Component, ...props }) {
-  const [isAuthenticated, setAuthentication] = useState(null);
-  const [user, setUser] = useState(null);
+  const [{ isAuthenticated, user }, setAuthorization] = useState({
+    isAuthenticated: null,
+    user: null,
+  });
   useEffect(() => {
     fetch(import.meta.env.VITE_API_URL + "/Auth", {
       method: "POST",
@@ -14,19 +16,19 @@ function PrivateRouter({ Component, ...props }) {
     })
       .then((result) => {
         if (result.ok) {
-          setAuthentication(true);
           return result.json();
         } else {
-          setAuthentication(false);
+          setAuthorization({ isAuthenticated: false });
         }
       })
       .then((res) => {
-        setUser(res);
+        setAuthorization({ isAuthenticated: true, user: res });
       })
       .catch(() => {
-        setAuthentication(false);
+        setAuthorization({ isAuthenticated: false });
       });
   }, []);
+
   if (isAuthenticated === null) {
     return <a>Loading...</a>;
   } else {
