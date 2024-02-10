@@ -1,67 +1,69 @@
-import { Component, Fragment } from "react";
-import logo from "../Icons/PNG/main-logo.png";
+import { Component, Fragment, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
 
-function isSet(text) {
-  if (text === undefined) return 0;
-  if (text === null) return 0;
-  if (text.trim().length === 0) return 0;
-  return 1;
-}
+class Profile extends Component {
+  state = {
+    isEditing: [false, false, false],
+  };
 
-function Detail({ fieldName, fieldValue }) {
-  function PlaceholderedLabel({ text }) {
+  Detail = ({ fieldName, fieldValue }, key) => {
     return (
-      <div className={"col " + (isSet(text) ? "" : "placeholder")}>
-        {text || ""}
+      <div className="row py-1">
+        {this.state[key] && "ok"}
+        <label className="col">{fieldName}: </label>
+        <div className="col ">{fieldValue}</div>
       </div>
     );
+  };
+
+  setEditing(index) {
+    this.setState({
+      isEditing: this.state.isEditing.map((v, i) => i === index && !v),
+    });
   }
-  return (
-    <div className="row py-1 placeholder-glow">
-      <div className="col">{fieldName}: </div>
-      <PlaceholderedLabel text={fieldValue} />
-    </div>
-  );
-}
 
-function Details({ list }) {
-  return (
-    <div
-      className="container py-2 my-1 rounded-1"
-      style={{ border: "1px solid black" }}
-    >
-      {list.map((item, index) => (
-        <Detail {...item} key={index} />
-      ))}
-    </div>
-  );
-}
+  items = [
+    {
+      head: "Account",
+      readonly: true,
+      icon: "person-circle",
+      items: [
+        { fieldName: "Username", fieldValue: this.props.user.username },
+        { fieldName: "Email", fieldValue: this.props.user.email },
+      ],
+    },
+    {
+      head: "Personal Info",
+      readonly: false,
+      icon: "person-fill",
+      items: [
+        { fieldName: "First Name", fieldValue: this.props.user.firstName },
+        { fieldName: "Last Name", fieldValue: this.props.user.lastName },
+      ],
+    },
+    {
+      head: "Password",
+      readonly: false,
+      icon: "key-fill",
+      items: [
+        {
+          fieldName: "Current Password",
+          fieldValue: this.props.user.firstName,
+        },
+        { fieldName: "New Password", fieldValue: this.props.user.lastName },
+        {
+          fieldName: "Repeat Password",
+          fieldValue: this.props.user.lastName,
+        },
+      ],
+    },
+  ];
 
-class Profile extends Component {
   render() {
-    const items = [
-      {
-        head: "Account",
-        icon: "person-circle",
-        items: [
-          { fieldName: "Username", fieldValue: this.props.user.username },
-          { fieldName: "Email", fieldValue: this.props.user.email },
-        ],
-      },
-      {
-        head: "Personal Info",
-        icon: "person-fill",
-        items: [
-          { fieldName: "First Name", fieldValue: this.props.user.firstName },
-          { fieldName: "Last Name", fieldValue: this.props.user.lastName },
-        ],
-      },
-    ];
     return (
-      <main className="m-auto d-flex flex-column flex-lg-row">
-        <div className="d-flex flex-column mb-2 mb-lg-0 me-lg-3">
+      <main className="w-100">
+        <div className="container bg-body-secondary rounded-2 px-4 py-2">
           <Stack direction="horizontal" className="p-1">
             <Button variant="primary">
               <i className="bi bi-arrow-left" />
@@ -70,18 +72,32 @@ class Profile extends Component {
               Save
             </Button>
           </Stack>
-          <img src={logo} alt="Logo" className="w-100" />
-        </div>
-        <div className="container bg-body-secondary rounded-2 py-3">
-          {items.map(({ head, icon, items }, index) => (
-            <Fragment key={index}>
-              <strong>
-                <i className={"px-2 bi bi-" + icon} />
-                {head}:
-              </strong>
-              <Details list={items} />
-            </Fragment>
-          ))}
+          <div className="row gap-1 row-cols-4">
+            {this.items.map(({ readonly, head, icon, items }, index) => (
+              <div
+                key={index}
+                className="p-2 rounded-1 col"
+                style={{ border: "1px solid black" }}
+              >
+                <strong className="d-flex justify-content-between">
+                  <div>
+                    <i className={"px-1 py-2 bi bi-" + icon} />
+                    {head}:
+                  </div>
+                  {readonly || (
+                    <i
+                      className={
+                        "bi bi-" +
+                        (this.state.isEditing[index] ? "x-lg" : "pencil-square")
+                      }
+                      onClick={() => this.setEditing(index)}
+                    />
+                  )}
+                </strong>
+                <div>{items.map(this.Detail)}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </main>
     );

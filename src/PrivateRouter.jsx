@@ -3,8 +3,13 @@ import { Navigate } from "react-router-dom";
 
 function PrivateRouter({ Component, ...props }) {
   const [{ isAuthenticated, user }, setAuthorization] = useState({
-    isAuthenticated: null,
-    user: null,
+    isAuthenticated: true,
+    user: {
+      username: "test",
+      email: "test",
+      firstName: "test",
+      lastName: ".",
+    },
   });
 
   if (!isAuthenticated) {

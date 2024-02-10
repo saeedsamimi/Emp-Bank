@@ -4,13 +4,14 @@ import logo from "../Icons/JPEG/main-logo.jpeg";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/js/bootstrap.bundle";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { LightInput } from "../Components/Fields";
 
 class Login extends Component {
   state = {
     method: true,
     pass: { icon: "eye", type: "password" },
+    loggedIn: false,
   };
 
   onLogInFormSubmit = async (e) => {
@@ -36,6 +37,7 @@ class Login extends Component {
         if (result.result === true) {
           document.cookie = "token=" + result.token;
           alert(`Success!`);
+          this.setState({ loggedIn: true });
         } else {
           alert(result.msg, result.reason);
         }
@@ -54,7 +56,9 @@ class Login extends Component {
   };
 
   render() {
-    return (
+    return this.state.loggedIn ? (
+      <Navigate to="/dashboard" />
+    ) : (
       <main className="form-signin w-100 m-auto form d-flex flex-column flex-lg-row p-2">
         <img
           src={logo}
