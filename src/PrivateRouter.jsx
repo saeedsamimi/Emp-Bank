@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer } from "react";
+import { useState } from "react";
 import { Navigate } from "react-router-dom";
 
 function PrivateRouter({ Component, ...props }) {
@@ -6,7 +6,8 @@ function PrivateRouter({ Component, ...props }) {
     isAuthenticated: null,
     user: null,
   });
-  useEffect(() => {
+
+  if (!isAuthenticated) {
     fetch(import.meta.env.VITE_API_URL + "/Auth", {
       method: "POST",
       mode: "cors",
@@ -15,11 +16,8 @@ function PrivateRouter({ Component, ...props }) {
       },
     })
       .then((result) => {
-        if (result.ok) {
-          return result.json();
-        } else {
-          setAuthorization({ isAuthenticated: false });
-        }
+        if (result.ok) return result.json();
+        else setAuthorization({ isAuthenticated: false });
       })
       .then((res) => {
         setAuthorization({ isAuthenticated: true, user: res });
@@ -27,7 +25,7 @@ function PrivateRouter({ Component, ...props }) {
       .catch(() => {
         setAuthorization({ isAuthenticated: false });
       });
-  }, []);
+  }
 
   if (isAuthenticated === null) {
     return <a>Loading...</a>;
