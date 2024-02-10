@@ -6,6 +6,7 @@ import logo from "../Icons/PNG/main-logo-black-transparent.png";
 import "./dashboard.css";
 import Navbar from "../Components/Navbar";
 import ToolBox from "../Components/ToolBox";
+import { Link } from "react-router-dom";
 
 const items = [
   { text: "Dashboard", icon: "grid" },
@@ -140,12 +141,12 @@ class Dashboard extends Component {
                 <i className="bi bi-three-dots-vertical"></i>
               </button>
               <ul className="dropdown-menu">
-                <img className="dropdown-item" src={logo} />
+                <img className="dropdown-header w-100" src={logo} />
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <Link className="dropdown-item" to="/profile">
                     <i className="bi bi-person"></i>
                     Profile
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a className="dropdown-item" href="#">

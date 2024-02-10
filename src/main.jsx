@@ -8,6 +8,7 @@ import SignIn from "./Pages/Signin";
 import Login from "./Pages/Login";
 import Dashboard from "./Pages/Dashboard";
 import PrivateRouter from "./PrivateRouter";
+import Profile from "./Pages/Profile";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <PrivateRouter Component={Dashboard} />,
+  },
+  {
+    path: "/profile",
+    element: <PrivateRouter Component={Profile} />,
   },
 ]);
 

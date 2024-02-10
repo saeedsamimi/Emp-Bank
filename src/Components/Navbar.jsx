@@ -11,9 +11,6 @@ function NavbarItem({ text, icon, highlighted, onClick }) {
         e.preventDefault();
         onClick();
       }}
-      data-bs-toggle="tooltip"
-      data-bs-placement="right"
-      data-bs-title={text}
     >
       <OverlayTrigger
         placement="bottom"
@@ -24,7 +21,6 @@ function NavbarItem({ text, icon, highlighted, onClick }) {
           className={"nav_icon bi bi-" + icon + (highlighted ? "-fill" : "")}
         ></i>
       </OverlayTrigger>
-
       <span className="nav_name">{text}</span>
     </a>
   );
