@@ -1,18 +1,17 @@
-import { useState } from "react";
+import React, { createRef, useState } from "react";
 import { Navigate } from "react-router-dom";
 
-function PrivateRouter({ Component, ...props }) {
-  const [{ isAuthenticated, user }, setAuthorization] = useState({
-    isAuthenticated: true,
-    user: {
-      username: "test",
-      email: "test",
-      firstName: "test",
-      lastName: ".",
-    },
-  });
+class PrivateRouter extends React.Component {
+  state = {
+    isAuthenticated: null,
+    user: null,
+  };
 
-  if (!isAuthenticated) {
+  componentDidMount() {
+    this.setState({
+      isAuthenticated: null,
+      user: null,
+    });
     fetch(import.meta.env.VITE_API_URL + "/Auth", {
       method: "POST",
       mode: "cors",
@@ -20,26 +19,29 @@ function PrivateRouter({ Component, ...props }) {
         Authorization: "Bearer " + document.cookie.split("=")[1],
       },
     })
-      .then((result) => {
-        if (result.ok) return result.json();
-        else setAuthorization({ isAuthenticated: false });
-      })
-      .then((res) => {
-        setAuthorization({ isAuthenticated: true, user: res });
+      .then(async (result) => {
+        if (result.ok) {
+          const json = await result.json();
+          this.setState({ isAuthenticated: true, user: json });
+        } else this.setState({ isAuthenticated: false });
       })
       .catch(() => {
-        setAuthorization({ isAuthenticated: false });
+        this.setState({ isAuthenticated: false });
       });
   }
 
-  if (isAuthenticated === null) {
-    return <a>Loading...</a>;
-  } else {
-    return isAuthenticated ? (
-      <Component {...props} user={user} />
-    ) : (
-      <Navigate to="/login" />
-    );
+  render() {
+    const { Component, ...props } = this.props;
+    if (this.state.isAuthenticated === null) {
+      return <a>Loading...</a>;
+    } else {
+      return this.state.isAuthenticated ? (
+        <Component {...props} user={this.state.user} />
+      ) : (
+        <Navigate to="/login" />
+      );
+    }
   }
 }
+
 export default PrivateRouter;
