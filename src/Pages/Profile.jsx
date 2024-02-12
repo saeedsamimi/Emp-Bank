@@ -9,6 +9,7 @@ function PasswordField({ name, id, label }) {
       <InputGroup.Text id={id}>{label}:</InputGroup.Text>
       <Form.Control
         name={name}
+        required
         aria-describedby={id}
         type={hidden ? "password" : "text"}
       />
@@ -23,6 +24,10 @@ class Profile extends Component {
   state = {
     currentTab: "Account",
     message: "",
+    nameMessage: "",
+    isNameEdit: false,
+    firstname: this.props.user.firstname,
+    lastname: this.props.user.lastname,
   };
 
   handleChangePassFormSubmit = (e) => {
@@ -45,6 +50,48 @@ class Profile extends Component {
       .catch((err) => this.setState({ message: err.message || err.code }));
   };
 
+  handleRename = (e) => {
+    e.preventDefault();
+    const url = import.meta.env.VITE_API_URL + "/rename";
+    fetch(url, {
+      method: "POST",
+      body: new FormData(e.target),
+      headers: {
+        Authorization: "Bearer " + document.cookie.split("=")[1],
+      },
+    })
+      .then(async (res) => {
+        if (res.ok) {
+          const result = await res.json();
+          this.setState({
+            nameMessage: "Your name changed successfully!",
+            firstname: result.firstname,
+            lastname: result.lastname,
+          });
+        } else {
+          this.setState({
+            nameMessage: "An error occured while changing the name!",
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          nameMessage: "Error occured: (" + err.message || err.code + ")",
+        });
+      });
+  };
+
+  isChanged() {
+    return !(
+      this.props.user.firstname === this.state.firstname &&
+      this.props.user.lastname === this.state.lastname
+    );
+  }
+
+  isEmpty() {
+    return Boolean(this.state.firstname || this.state.lastname);
+  }
+
   render() {
     return (
       <main className="w-100">
@@ -52,9 +99,6 @@ class Profile extends Component {
           <Stack direction="horizontal" className="p-1">
             <Button variant="primary" onClick={() => window.history.back()}>
               <i className="bi bi-arrow-left" />
-            </Button>
-            <Button className="ms-auto" variant="primary">
-              Save
             </Button>
           </Stack>
           <div className="bg-body-secondary rounded-2 px-4 py-2">
@@ -80,7 +124,7 @@ class Profile extends Component {
                     id="username"
                     readOnly
                     aria-describedby="username-lbl"
-                    value={this.props.user.username}
+                    defaultValue={this.props.user.username}
                   />
                 </InputGroup>
                 <InputGroup>
@@ -89,7 +133,7 @@ class Profile extends Component {
                     id="email"
                     readOnly
                     aria-describedby="email-lbl"
-                    value={this.props.user.email}
+                    defaultValue={this.props.user.email}
                   />
                 </InputGroup>
               </Tab>
@@ -102,32 +146,46 @@ class Profile extends Component {
                   </>
                 }
               >
-                <InputGroup className="mb-3">
-                  <InputGroup.Text id="fname-lbl">First Name:</InputGroup.Text>
-                  <Form.Control
-                    id="fname"
-                    readOnly
-                    aria-describedby="fname-lbl"
-                    value={this.props.user.firstName}
-                  />
-                </InputGroup>
-                <InputGroup className="mb-3">
-                  <InputGroup.Text id="lname-lbl">Last Name:</InputGroup.Text>
-                  <Form.Control
-                    id="lname"
-                    readOnly
-                    aria-describedby="lname-lbl"
-                    value={this.props.user.lastName}
-                  />
-                </InputGroup>
-                {this.props.user.firstName || this.props.user.lastName || (
-                  <li className="text-danger">
-                    The name is not set please set it!
-                  </li>
-                )}
-                <Button variant="primary" className="mt-2">
-                  Edit
-                </Button>
+                <Form method="POST" onSubmit={this.handleRename}>
+                  <InputGroup className="mb-3">
+                    <InputGroup.Text id="fname-lbl">
+                      First Name:
+                    </InputGroup.Text>
+                    <Form.Control
+                      id="fname"
+                      name="firstname"
+                      aria-describedby="fname-lbl"
+                      defaultValue={this.state.firstname}
+                      required
+                    />
+                  </InputGroup>
+                  <InputGroup className="mb-3">
+                    <InputGroup.Text id="lname-lbl">Last Name:</InputGroup.Text>
+                    <Form.Control
+                      id="lname"
+                      name="lastname"
+                      aria-describedby="lname-lbl"
+                      defaultValue={this.state.lastname}
+                      required
+                    />
+                  </InputGroup>
+                  {this.isEmpty() || (
+                    <li className="text-danger">
+                      The name is not set please set it!
+                    </li>
+                  )}
+                  {this.state.nameMessage !== "" && (
+                    <li className="text-success">{this.state.nameMessage}</li>
+                  )}
+                  <Button
+                    variant="primary"
+                    className="mt-2"
+                    type="submit"
+                    onClick={this.handleChangeNameEdit}
+                  >
+                    Edit
+                  </Button>
+                </Form>
               </Tab>
               <Tab
                 eventKey="Password"
