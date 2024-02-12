@@ -1,5 +1,5 @@
 import { Component, useState } from "react";
-import { Button, InputGroup, Form, Stack, Tab, Tabs } from "react-bootstrap";
+import { Button, InputGroup, Form, Tab, Tabs } from "react-bootstrap";
 
 function PasswordField({ name, id, label }) {
   const [hidden, setHidden] = useState(true);
@@ -69,8 +69,9 @@ class Profile extends Component {
             lastname: result.lastname,
           });
         } else {
+          const result = await res.text();
           this.setState({
-            nameMessage: "An error occured while changing the name!",
+            nameMessage: result,
           });
         }
       })
@@ -96,11 +97,9 @@ class Profile extends Component {
     return (
       <main className="w-100">
         <div className="container" style={{ maxWidth: "600px" }}>
-          <Stack direction="horizontal" className="p-1">
-            <Button variant="primary" onClick={() => window.history.back()}>
-              <i className="bi bi-arrow-left" />
-            </Button>
-          </Stack>
+          <Button variant="primary" onClick={() => window.history.back()}>
+            <i className="bi bi-arrow-left" />
+          </Button>
           <div className="bg-body-secondary rounded-2 px-4 py-2">
             <Tabs
               defaultActiveKey={this.state.currentTab}

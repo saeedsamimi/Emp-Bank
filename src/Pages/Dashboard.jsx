@@ -56,6 +56,11 @@ class Dashboard extends Component {
   handleJob_manage = () => {
     console.log("Job manage clicked");
   };
+  /* handling the logout operation */
+  handleLogout = () => {
+    document.cookie = null;
+    window.location.reload();
+  };
 
   Toolboxes = [
     {
@@ -149,16 +154,20 @@ class Dashboard extends Component {
                   </Link>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <Link className="dropdown-item" to="/setting">
                     <i className="bi bi-gear"></i>
                     Setting
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <hr className="dropdown-divider" />
                 </li>
                 <li>
-                  <a className="dropdown-item text-danger" href="#">
+                  <a
+                    className="dropdown-item text-danger"
+                    href=""
+                    onClick={this.handleLogout}
+                  >
                     <i className="bi bi-door-closed"></i>
                     Log out
                   </a>
