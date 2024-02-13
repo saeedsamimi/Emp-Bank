@@ -4,7 +4,7 @@ import logo from "../Icons/JPEG/main-logo.jpeg";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/js/bootstrap.bundle";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { LightInput } from "../Components/Fields";
 
 class Login extends Component {
@@ -41,7 +41,7 @@ class Login extends Component {
           alert(result.msg, result.reason);
         }
       })
-      .catch((error) => {
+      .catch(() => {
         alert(`Connection Failed!`);
       });
   };

@@ -1,4 +1,4 @@
-import React from "react";
+import { StrictMode } from "react";
 import "./index.css";
 import App from "./App";
 import { createRoot } from "react-dom/client";
@@ -24,7 +24,7 @@ const router = createBrowserRouter(
       <Route path="login" element={<Login />} />
       <Route
         path="dashboard"
-        element={<PrivateRouter Component={Dashboard} index={0} />}
+        element={<PrivateRouter Component={Dashboard} />}
       />
       <Route path="profile" element={<PrivateRouter Component={Profile} />} />
       <Route path="setting" element={<PrivateRouter Component={Settings} />} />
@@ -33,7 +33,7 @@ const router = createBrowserRouter(
 );
 
 createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  <StrictMode>
     <RouterProvider router={router} />
-  </React.StrictMode>
+  </StrictMode>
 );
