@@ -1,9 +1,89 @@
 import ToolBox from "../../Components/ToolBox";
+import { useEffect, useState, useTransition } from "react";
 
-function DafaultDashboard() {
+const url = import.meta.env.VITE_API_URL + "/fetchEmployees";
+
+function DafaultDashboard({ user, setModal, navigator }) {
+  const [employees, setEmployees] = useState([]);
+  const [isPending, startTransition] = useTransition();
+  useEffect(function () {
+    startTransition(async function () {
+      try {
+        const result = await fetch(url, {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer " + document.cookie.split("=")[1],
+          },
+          mode: "cors",
+        });
+        if (result.ok) {
+          const emps = await result.json();
+          setEmployees(emps);
+        } else if (result.status === 403) {
+          setModal({
+            isShown: true,
+            title: "error while fetching data",
+            body: "Your authentiction token is expired!",
+            button: "Ok",
+            onClick: () => {
+              navigator("/login");
+            },
+          });
+          setTimeout(() => navigator("/login"), 5000);
+        } else if (result.status === 404) {
+          setModal({
+            isShown: true,
+            title: "The requested url not exists",
+            body: "This url not found. the server responsed with status of 404",
+            button: "Re try!",
+            onClick: () => {
+              window.location.reload();
+            },
+          });
+        } else if (result.status === 500) {
+          setModal({
+            isShown: true,
+            title: "an unexpected error occured",
+            body: "The server responsed with status of 500",
+            button: "Re try",
+            onClick: () => {
+              window.location.reload();
+            },
+          });
+        } else {
+          setModal({
+            isShown: true,
+            title: result.statusText,
+            body: "The server responsed with status of " + result.status,
+            button: "Retry!",
+            onClick: () => {
+              window.location.reload();
+            },
+          });
+        }
+      } catch (err) {
+        setModal({
+          isShown: true,
+          title: "error while requesting",
+          body: "The request cannot be sent from client to server",
+          button: "Retry",
+          onClick: () => {},
+        });
+      }
+    });
+  }, []);
   /* EmployeeManage */
   const handleEmp_create = () => {
     console.log("Create Emp clicked");
+    setModal({
+      isShown: true,
+      title: "Test #1 + " + user.username,
+      body: "only for test from handleEmp_create",
+      button: "Ok",
+      onClick: (e) => {
+        console.log("is clicked: ", e);
+      },
+    });
   };
   const handleEmp_edit = () => {
     console.log("Edit Emp clicked");
@@ -80,6 +160,8 @@ function DafaultDashboard() {
       head: "Manage Employee",
     },
   ];
+  console.log(employees);
+  if (isPending) return <p>Pending</p>;
   return <>{Toolboxes.map(ToolBox)}</>;
 }
 export default DafaultDashboard;
