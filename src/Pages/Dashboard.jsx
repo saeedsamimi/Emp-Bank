@@ -11,11 +11,18 @@ import DafaultDashboard from "./DashboardPages/Default";
 import * as PropTypes from "prop-types";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import { Toast, ToastContainer } from "react-bootstrap";
 
 function Dashboard({ user }) {
   const navigator = useNavigate();
   const [expanded, setExpanded] = useState(false);
   const [selected, setSelected] = useState(0);
+  const [toastProps, setToastProps] = useState({
+    show: false,
+    title: "",
+    mode: "danger",
+    body: "",
+  });
   const [modalState, setModalState] = useState({
     isShown: false,
     title: "",
@@ -136,11 +143,32 @@ function Dashboard({ user }) {
             <CurrentComponent
               user={user}
               setModal={setModalState}
+              setToast={setToastProps}
               navigator={navigator}
             />
           </div>
         </main>
       </div>
+      <ToastContainer
+        position="bottom-end"
+        style={{ zIndex: 1000 }}
+        className="p-3"
+      >
+        <Toast
+          onClose={() => setToastProps({ show: false })}
+          show={toastProps.show}
+          delay={3000}
+          autohide
+        >
+          <Toast.Header>
+            <i
+              className={"me-2 bi bi-info-circle-fill text-" + toastProps.mode}
+            />
+            <strong>{toastProps.title}</strong>
+          </Toast.Header>
+          <Toast.Body>{toastProps.body}</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </>
   );
 }

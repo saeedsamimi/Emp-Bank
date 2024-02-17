@@ -6,13 +6,15 @@ const url = import.meta.env.VITE_API_URL + "/getemployee";
 const addEmpUrl = import.meta.env.VITE_API_URL + "/addemployee";
 
 // eslint-disable-next-line no-unused-vars
-function DafaultDashboard({ user, setModal, navigator }) {
+function DafaultDashboard({ user, setModal, navigator, setToast }) {
   const [employees, setEmployees] = useState([]);
   const [isPending, startTransition] = useTransition();
+  const [selected, setSelected] = useState(null);
 
   const employeeView = (value, i) => {
     return (
-      <tr key={i}>
+      <tr key={i} onClick={() => setSelected(i)}>
+        <td className={selected === i && "text-bg-secondary"}>{i + 1}</td>
         <td>{value.firstname + " " + value.lastname}</td>
         <td>{value.job}</td>
         <td>{value.salary}</td>
@@ -127,7 +129,7 @@ function DafaultDashboard({ user, setModal, navigator }) {
       button: "Create",
       onClick: async (e) => {
         const formData = new FormData(document.getElementById("createEmpForm"));
-        e.target.innerText = "Loading...";
+        e.target.innerText = "inserting...";
         e.target.setAttribute("Disabled", "");
         try {
           const result = await fetch(addEmpUrl, {
@@ -139,34 +141,58 @@ function DafaultDashboard({ user, setModal, navigator }) {
             },
           });
           if (result.ok) {
-            alert("Yes inserted!");
             setModal({
               isShown: false,
             });
+            setToast({
+              show: true,
+              title: "Employee inserted",
+              mode: "success",
+              body: "The employee inserted successfully!",
+            });
           } else {
-            alert("Cannot insert!");
             setModal({
               isShown: false,
+            });
+            setToast({
+              show: true,
+              title: "Employee cannot insert",
+              mode: "danger",
+              body: "The employee cannot insert , please try again",
             });
           }
         } catch (err) {
-          console.log(err);
           setModal({
             isShown: false,
+          });
+          setToast({
+            show: true,
+            title: "Error while inserting!",
+            mode: "warning",
+            body: "The employee cannot insert: \n" + (err.message || err.code),
           });
         }
       },
     });
   };
+
   const handleEmp_edit = () => {
-    console.log("Edit Emp clicked");
+    setToast({
+      show: true,
+      title: "No item is selected!",
+      mode: "warning",
+      body: "No item selected please select an employee to edit!",
+    });
   };
+
   const handleEmp_report = () => {
     console.log("Report emp clicked");
   };
+
   const handleEmp_stats = () => {
     console.log("Statistics Emp clicked");
   };
+
   /* Work and Salary Manage */
   const hanldeSalary_report = () => {
     console.log("Report Salary clicked");
@@ -235,8 +261,9 @@ function DafaultDashboard({ user, setModal, navigator }) {
   ];
   const tableStyle = {
     gridColumn: "1/-1",
-    boxShadow: "0 0 7px rgba(0, 0, 0, 0.2)",
+    boxShadow: "0 0 4px rgba(0, 0, 0, 0.2)",
   };
+
   if (isPending) return <p>Loading...</p>;
   return (
     <>
@@ -245,6 +272,7 @@ function DafaultDashboard({ user, setModal, navigator }) {
         <Table striped bordered hover style={tableStyle}>
           <thead>
             <tr>
+              <td>#</td>
               <td>Employee Name</td>
               <td>Job</td>
               <td>Salary</td>
