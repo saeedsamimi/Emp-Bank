@@ -4,6 +4,7 @@ import { useEffect, useState, useTransition } from "react";
 
 const url = import.meta.env.VITE_API_URL + "/getemployee";
 const addEmpUrl = import.meta.env.VITE_API_URL + "/addemployee";
+const editEmpUrl = import.meta.env.VITE_API_URL + "/editemployee";
 
 // eslint-disable-next-line no-unused-vars
 function DafaultDashboard({ user, setModal, navigator, setToast }) {
@@ -14,7 +15,7 @@ function DafaultDashboard({ user, setModal, navigator, setToast }) {
   const employeeView = (value, i) => {
     return (
       <tr key={i} onClick={() => setSelected(i)}>
-        <td className={selected === i && "text-bg-secondary"}>{i + 1}</td>
+        <td className={selected === i ? "text-bg-secondary" : ""}>{i + 1}</td>
         <td>{value.firstname + " " + value.lastname}</td>
         <td>{value.job}</td>
         <td>{value.salary}</td>
@@ -141,9 +142,6 @@ function DafaultDashboard({ user, setModal, navigator, setToast }) {
             },
           });
           if (result.ok) {
-            setModal({
-              isShown: false,
-            });
             setToast({
               show: true,
               title: "Employee inserted",
@@ -151,9 +149,6 @@ function DafaultDashboard({ user, setModal, navigator, setToast }) {
               body: "The employee inserted successfully!",
             });
           } else {
-            setModal({
-              isShown: false,
-            });
             setToast({
               show: true,
               title: "Employee cannot insert",
@@ -162,14 +157,15 @@ function DafaultDashboard({ user, setModal, navigator, setToast }) {
             });
           }
         } catch (err) {
-          setModal({
-            isShown: false,
-          });
           setToast({
             show: true,
             title: "Error while inserting!",
             mode: "warning",
             body: "The employee cannot insert: \n" + (err.message || err.code),
+          });
+        } finally {
+          setModal({
+            isShown: false,
           });
         }
       },
@@ -177,12 +173,110 @@ function DafaultDashboard({ user, setModal, navigator, setToast }) {
   };
 
   const handleEmp_edit = () => {
-    setToast({
-      show: true,
-      title: "No item is selected!",
-      mode: "warning",
-      body: "No item selected please select an employee to edit!",
-    });
+    if (selected === null) {
+      setToast({
+        show: true,
+        title: "No item is selected!",
+        mode: "warning",
+        body: "No item selected please select an employee to edit!",
+      });
+    } else {
+      const selectedEmp = employees.at(selected);
+      setModal({
+        isShown: true,
+        title: "Edit Employee",
+        body: (
+          <Form id="editEmpForm">
+            <Form.Group>
+              <Form.Label htmlFor="firstname">First Name: </Form.Label>
+              <Form.Control
+                type="text"
+                name="firstname"
+                id="firstname"
+                defaultValue={selectedEmp.firstname}
+                required
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label htmlFor="lastname">Last Name: </Form.Label>
+              <Form.Control
+                type="text"
+                name="lastname"
+                id="lastname"
+                defaultValue={selectedEmp.lastname}
+                required
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label htmlFor="job">Job: </Form.Label>
+              <Form.Control
+                type="text"
+                name="job"
+                id="job"
+                required
+                defaultValue={selectedEmp.job}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label htmlFor="salary">Salary: </Form.Label>
+              <Form.Control
+                type="number"
+                maxLength="9"
+                minLength="4"
+                name="salary"
+                defaultValue={selectedEmp.salary}
+                id="salary"
+                required
+              />
+            </Form.Group>
+          </Form>
+        ),
+        button: "Edit",
+        onClick: async (e) => {
+          const formData = new FormData(document.getElementById("editEmpForm"));
+          formData.append("id", selectedEmp._id);
+          e.target.innerText = "editing...";
+          e.target.setAttribute("Disabled", "");
+          try {
+            const result = await fetch(editEmpUrl, {
+              method: "POST",
+              mode: "cors",
+              body: formData,
+              headers: {
+                Authorization: "Bearer " + document.cookie.split("=")[1],
+              },
+            });
+            if (result.ok) {
+              setToast({
+                show: true,
+                title: "Employee updated",
+                mode: "success",
+                body: "The employee updated successfully!",
+              });
+            } else {
+              setToast({
+                show: true,
+                title: "Employee cannot update",
+                mode: "danger",
+                body: "The employee cannot updated , please try again",
+              });
+            }
+          } catch (err) {
+            setToast({
+              show: true,
+              title: "Error while updating!",
+              mode: "warning",
+              body:
+                "The employee cannot update: \n" + (err.message || err.code),
+            });
+          } finally {
+            setModal({
+              isShown: false,
+            });
+          }
+        },
+      });
+    }
   };
 
   const handleEmp_report = () => {
