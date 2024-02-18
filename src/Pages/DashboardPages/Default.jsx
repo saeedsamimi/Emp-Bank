@@ -5,6 +5,7 @@ import { useEffect, useState, useTransition } from "react";
 const url = import.meta.env.VITE_API_URL + "/getemployee";
 const addEmpUrl = import.meta.env.VITE_API_URL + "/addemployee";
 const editEmpUrl = import.meta.env.VITE_API_URL + "/editemployee";
+const deleteEmpUrl = import.meta.env.VITE_API_URL + "/delemployee";
 
 // eslint-disable-next-line no-unused-vars
 function DafaultDashboard({ user, setModal, navigator, setToast }) {
@@ -90,6 +91,7 @@ function DafaultDashboard({ user, setModal, navigator, setToast }) {
       }
     });
   }, []);
+
   /* EmployeeManage */
   const handleEmp_create = () => {
     setModal({
@@ -182,6 +184,7 @@ function DafaultDashboard({ user, setModal, navigator, setToast }) {
       });
     } else {
       const selectedEmp = employees.at(selected);
+      console.log(selectedEmp);
       setModal({
         isShown: true,
         title: "Edit Employee",
@@ -279,8 +282,64 @@ function DafaultDashboard({ user, setModal, navigator, setToast }) {
     }
   };
 
-  const handleEmp_report = () => {
-    console.log("Report emp clicked");
+  const handleEmp_delete = () => {
+    if (selected === null) {
+      setToast({
+        show: true,
+        title: "No item is selected!",
+        mode: "warning",
+        body: "No item selected please select an employee to Delete!",
+      });
+    } else {
+      setModal({
+        isShown: true,
+        title: "sure to delete?",
+        body: "Are you sure to delete this item?",
+        button: "Delete",
+        onClick: async (e) => {
+          e.target.innerText = "editing...";
+          e.target.setAttribute("Disabled", "");
+          const empID = employees.at(selected)._id;
+          try {
+            const result = await fetch(deleteEmpUrl, {
+              method: "DELETE",
+              body: empID,
+              headers: {
+                Authorization: "Bearer " + document.cookie.split("=")[1],
+              },
+            });
+            if (result.ok) {
+              setToast({
+                show: true,
+                title: "Error while deleting!",
+                mode: "success",
+                body: "The employee deleted successfully: \n",
+              });
+            } else {
+              setToast({
+                show: true,
+                title: "Error while updating!",
+                mode: "warning",
+                body: "The employee cannot delete. maybe your authentication failed.",
+              });
+            }
+          } catch (err) {
+            setToast({
+              show: true,
+              title: "failed to fetch delete !",
+              mode: "danger",
+              body:
+                "the connection to backend for deleting this item failed. " +
+                  err.message || err.code,
+            });
+          } finally {
+            setModal({
+              isShown: false,
+            });
+          }
+        },
+      });
+    }
   };
 
   const handleEmp_stats = () => {
@@ -315,9 +374,9 @@ function DafaultDashboard({ user, setModal, navigator, setToast }) {
           onClick: handleEmp_edit,
         },
         {
-          text: "Report Employee",
-          icon: "person-exclamation",
-          onClick: handleEmp_report,
+          text: "Delete Employee",
+          icon: "trash",
+          onClick: handleEmp_delete,
         },
         {
           text: "Stats Employee",
