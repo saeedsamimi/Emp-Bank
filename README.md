@@ -1,8 +1,10 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# EMP-BANK
+![main-logo-black](https://github.com/saeedsamimi/React/assets/67265541/e6d5221c-8f4b-4edd-aec7-e0ffa9524adc)
 
-Currently, two official plugins are available:
+a simple system for bosses whom need to organize their employees
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The Backend codes is [here](https://github.com/saeedsamimi/EB-Backend)
+The project is in progess...
+
+the deployment is [here](https://saeedsamimi.ir/login)
